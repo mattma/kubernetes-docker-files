@@ -10,6 +10,7 @@ mkdir -p /var/lib/etcd
 
 ```
 sudo docker run --detach --net=host --name=etcd \
+--restart=always \
 --volume=/var/lib/etcd:/var/lib/etcd \
 --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
 quay.io/coreos/etcd:v2.0.11 \
@@ -36,6 +37,7 @@ docker build -t quay.io/kelseyhightower/kubelet:0.19.0 .
 
 ```
 sudo docker run --detach --net=host --name=kubelet \
+--restart=always \
 --volume=/var/run/docker.sock:/var/run/docker.sock \
 --volume=/etc/kubernetes/manifests:/etc/kubernetes/manifests \
 --volume=/etc/machine-id:/etc/machine-id \
@@ -69,6 +71,7 @@ docker build -t quay.io/kelseyhightower/kube-apiserver:0.19.0 .
 
 ```
 sudo docker run --detach --net=host --name=kube-apiserver \
+--restart=always \
 quay.io/kelseyhightower/kube-apiserver:0.19.0 \
 --etcd-servers=http://127.0.0.1:2379 \
 --insecure-bind-address=0.0.0.0 \
@@ -98,6 +101,7 @@ docker build -t quay.io/kelseyhightower/kube-controller-manager:0.19.0 .
 
 ```
 sudo docker run --detach --net=host --name=kube-controller-manager \
+--restart=always \
 quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
@@ -124,6 +128,7 @@ docker build -t quay.io/kelseyhightower/kube-proxy:0.19.0 .
 
 ```
 sudo docker run --detach --net=host --name=kube-proxy --privileged \
+--restart=always \
 quay.io/kelseyhightower/kube-proxy:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
@@ -150,6 +155,7 @@ docker build -t quay.io/kelseyhightower/kube-scheduler:0.19.0 .
 
 ```
 sudo docker run --detach --net=host --name=kube-scheduler \
+--restart=always \
 quay.io/kelseyhightower/kube-scheduler:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
