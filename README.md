@@ -97,7 +97,7 @@ docker build -t quay.io/kelseyhightower/kube-controller-manager:0.19.0 .
 ### Run
 
 ```
-sudo docker run --detach --net=host --name=kube-proxy --privileged \
+sudo docker run --detach --net=host --name=kube-controller-manager \
 quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
