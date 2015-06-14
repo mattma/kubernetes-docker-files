@@ -5,9 +5,15 @@ Build Docker images from upstream binaries
 ## etcd
 
 ```
+mkdir -p /var/lib/etcd
+```
+
+```
 sudo docker run --detach --net=host --name=etcd \
+--volume=/var/lib/etcd:/var/lib/etcd \
 --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
-quay.io/coreos/etcd:v2.0.11
+quay.io/coreos/etcd:v2.0.11 \
+--data-dir /var/lib/etcd
 ```
 
 ## kubelet
