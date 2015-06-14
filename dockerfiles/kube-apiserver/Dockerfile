@@ -1,6 +1,10 @@
 FROM debian:jessie
+MAINTAINER Kelsey Hightower <kelsey.hightower@gmail.com>
 
-ADD kube-apiserver /usr/bin/kube-apiserver
+RUN apt-get update
+RUN apt-get -y -q install ca-certificates
+
+COPY kube-apiserver /usr/bin/kube-apiserver
 RUN chmod 755 /usr/bin/kube-apiserver
 
 ENTRYPOINT ["/usr/bin/kube-apiserver"]
