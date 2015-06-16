@@ -1,10 +1,10 @@
-FROM debian:jessie
-MAINTAINER Kelsey Hightower <kelsey.hightower@gmail.com>
+FROM centos
 
-RUN apt-get update
-RUN apt-get -y -q install ca-certificates
+RUN yum install -y sysvinit-tools
+ADD kubelet /kubelet
+RUN chmod a+rx /kubelet
+RUN cp /usr/bin/nsenter /nsenter
 
-COPY kubelet /usr/bin/kubelet
-RUN chmod 755 /usr/bin/kubelet
-
-ENTRYPOINT ["/usr/bin/kubelet"]
+VOLUME /var/lib/docker
+VOLUME /var/lib/kubelet
+CMD [ "/kubelet" ]
