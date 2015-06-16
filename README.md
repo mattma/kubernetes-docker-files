@@ -8,13 +8,19 @@ Build Docker images from upstream binaries
 mkdir -p /var/lib/etcd
 ```
 
+### Run
+
 ```
-sudo docker run --detach --net=host --name=etcd \
+sudo docker run --detach --net=host --privileged --name=etcd \
 --restart=always \
 --volume=/var/lib/etcd:/var/lib/etcd \
 --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
 quay.io/coreos/etcd:v2.0.11 \
---data-dir /var/lib/etcd
+--advertise-client-urls http://127.0.0.1:2379 \
+--data-dir /var/lib/etcd \
+--listen-client-urls http://127.0.0.1:2379 \
+--listen-peer-urls http://127.0.0.1:2380 \
+--name etcd0
 ```
 
 ## kubelet
@@ -38,16 +44,19 @@ docker build -t quay.io/kelseyhightower/kubelet:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kubelet \
 --restart=always \
---volume=/var/run/docker.sock:/var/run/docker.sock \
+--volume=/:/rootfs:ro \
 --volume=/etc/kubernetes/manifests:/etc/kubernetes/manifests \
---volume=/etc/machine-id:/etc/machine-id \
+--volume=/sys:/sys:ro \
+--volume=/var/lib/docker/:/var/lib/docker:ro \
+--volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
+--volume=/var/run:/var/run:rw \
 quay.io/kelseyhightower/kubelet:0.19.0 \
 --address=0.0.0.0 \
 --api-servers=http://localhost:8080 \
---boot-id-file=/etc/kubernetes/boot-id \
---enable_server \
+--enable-server \
 --hostname-override=127.0.0.1 \
 --config=/etc/kubernetes/manifests \
+--machine-id-file=/rootfs/etc/machine-id \
 --v=2
 ```
 
