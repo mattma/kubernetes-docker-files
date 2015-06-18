@@ -150,3 +150,26 @@ Are you sure you want to trust this key (yes/no)? yes
 Trusting "https://storage.googleapis.com/rktscience/pubkeys.gpg" for prefix "".
 Added root key at "/etc/rkt/trustedkeys/root.d/cdff0c6aee50d93a5e71a738b6f7807b1eb4ddae"
 ```
+
+Start the systemd units:
+
+```
+git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
+sudo cp kubernetes-docker-files/units/*.service /etc/systemd/system/
+```
+
+```
+sudo systemctl enable kube-apiserver
+sudo systemctl enable kube-controller-manager
+sudo systemctl enable kube-proxy
+sudo systemctl enable kube-scheduler
+sudo systemctl enable kubelet
+```
+
+```
+sudo systemctl start kube-apiserver
+sudo systemctl start kube-controller-manager
+sudo systemctl start kube-proxy
+sudo systemctl start kube-scheduler
+sudo systemctl start kubelet
+```
