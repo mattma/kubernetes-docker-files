@@ -2,6 +2,14 @@
 
 Build Docker images from upstream binaries.
 
+## Single node Kubernetes cluster
+
+The following command will stand up a single node Kubernetes cluster using [docker-compose](https://github.com/docker/compose)
+
+```
+docker-compose up -d
+```
+
 ## Download Kubernetes binaries
 
 ```
