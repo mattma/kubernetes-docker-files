@@ -173,3 +173,17 @@ sudo systemctl start kube-proxy
 sudo systemctl start kube-scheduler
 sudo systemctl start kubelet
 ```
+
+### View running containers
+
+```
+sudo rkt list
+```
+```
+UUID		ACI			STATE	NETWORKS
+2131936c	kube-proxy		        running	
+2a7aac55	kube-controller-manager	running	
+54c545b8	kube-scheduler		    running	
+7b27fb92	kubelet			        running	
+c712555c	kube-apiserver		    running	
+```
