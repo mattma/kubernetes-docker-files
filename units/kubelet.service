@@ -1,0 +1,35 @@
+[Unit]
+Description=Kubernetes Kubelet
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Requires=docker.service
+After=docker.service
+Requires=kube-apiserver.service
+After=kube-apiserver.service
+
+[Service]
+ExecStart=/usr/bin/rkt --insecure-skip-verify run \
+ http://storage.googleapis.com/rktscience/kubelet-0.19.0-linux-amd64.aci \
+ --volume=volume-nsenter,kind=host,source=/usr/bin/nsenter \
+ --volume=volume-rootfs,kind=host,source=/ \
+ --volume=volume-usr,kind=host,source=/usr \
+ --volume=volume-var-lib-kubelet,kind=host,source=/var/lib/kubelet \
+ --volume=volume-var-run,kind=host,source=/var/run \
+ --volume=volume-etc-kubernetes,kind=host,source=/etc/kubernetes \
+ --volume=volume-etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
+ --volume=volume-lib64,kind=host,source=/lib64 \
+ --volume=volume-sys,kind=host,source=/sys \
+ --volume=volume-var-lib-docker,kind=host,source=/var/lib/docker \
+ --volume=volume-resolv-conf,kind=host,source=/etc/resolv.conf \
+ -- \
+ --address=0.0.0.0 \
+ --api-servers=http://localhost:8080 \
+ --containerized \
+ --enable-server \
+ --hostname-override=127.0.0.1 \
+ --machine-id-file=/rootfs/etc/machine-id \
+ --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
