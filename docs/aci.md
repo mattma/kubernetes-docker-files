@@ -180,7 +180,7 @@ sudo systemctl start kubelet
 sudo rkt list
 ```
 ```
-UUID		ACI			STATE	NETWORKS
+UUID		ACI			            STATE	 NETWORKS
 2131936c	kube-proxy		        running	
 2a7aac55	kube-controller-manager	running	
 54c545b8	kube-scheduler		    running	
