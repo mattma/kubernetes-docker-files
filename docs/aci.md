@@ -2,6 +2,16 @@
 
 The docker images produced by these docker files can be converted to ACIs.
 
+After running the commands in this section you will have the following ACIs:
+
+```
+kelseyhightower-kube-apiserver-0.19.0.aci
+kelseyhightower-kube-controller-manager-0.19.0.aci
+kelseyhightower-kube-proxy-0.19.0.aci
+kelseyhightower-kube-scheduler-0.19.0.aci
+kelseyhightower-kubelet-0.19.0.aci
+```
+
 ## Convert Docker images to ACI using docker2aci
 
 ```
