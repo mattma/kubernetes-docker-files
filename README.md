@@ -192,17 +192,3 @@ quay.io/kelseyhightower/kube-scheduler:0.19.0 \
 --master=http://127.0.0.1:8080 \
 --v=2
 ```
-
-## kubectl
-
-### Build
-
-```
-docker build -t quay.io/kelseyhightower/kubectl:0.19.0 -f kubectl/Dockerfile
-```
-
-### Run
-
-```
-sudo docker run -t -i --net=host quay.io/kelseyhightower/kubectl:0.19.0 kubectl
-```
