@@ -1,6 +1,14 @@
 # Kubernetes Docker Files
 
-Build Docker images from upstream binaries
+Build Docker images from upstream binaries.
+
+## Download Kubernetes binaries
+
+```
+for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
+  curl -o ${b} -L https://storage.googleapis.com/kubernetes-release/release/v0.19.0/bin/linux/amd64/${b}
+done
+```
 
 ## etcd
 
