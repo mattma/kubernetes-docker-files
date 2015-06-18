@@ -2,6 +2,8 @@
 
 The docker images produced by these docker files can be converted to ACIs.
 
+## Convert Docker images to ACI using docker2aci
+
 After running the commands in this section you will have the following ACIs:
 
 ```
@@ -12,7 +14,7 @@ kelseyhightower-kube-scheduler-0.19.0.aci
 kelseyhightower-kubelet-0.19.0.aci
 ```
 
-## Convert Docker images to ACI using docker2aci
+### quay.io/kelseyhightower/kubelet:0.19.0
 
 ```
 docker2aci docker://quay.io/kelseyhightower/kubelet:0.19.0
