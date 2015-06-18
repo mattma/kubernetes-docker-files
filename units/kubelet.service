@@ -8,7 +8,6 @@ After=kube-apiserver.service
 
 [Service]
 ExecStart=/usr/bin/rkt run \
- https://storage.googleapis.com/rktscience/kubelet-0.19.0-linux-amd64.aci \
  --volume=volume-etc-kubernetes,kind=host,source=/etc/kubernetes \
  --volume=volume-etc-os-release,kind=host,source=/etc/os-release \
  --volume=volume-etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
@@ -21,6 +20,7 @@ ExecStart=/usr/bin/rkt run \
  --volume=volume-var-lib-docker,kind=host,source=/var/lib/docker \
  --volume=volume-var-lib-kubelet,kind=host,source=/var/lib/kubelet \
  --volume=volume-var-run,kind=host,source=/var/run \
+ https://storage.googleapis.com/rktscience/kubelet-0.19.0-linux-amd64.aci \
  -- \
  --address=0.0.0.0 \
  --api-servers=http://localhost:8080 \
