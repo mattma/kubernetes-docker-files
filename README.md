@@ -4,9 +4,11 @@ Build Docker images from upstream binaries.
 
 ## Single node Kubernetes cluster
 
-The following command will stand up a single node Kubernetes cluster using [docker-compose](https://github.com/docker/compose)
+tldr; The following commands will stand up a single node Kubernetes cluster using [docker-compose](https://github.com/docker/compose)
 
 ```
+git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
+cd kubernetes-docker-files
 docker-compose up -d
 ```
 
