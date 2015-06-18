@@ -23,6 +23,20 @@ kubectl cluster-info -s http://172.16.238.194:8080
 Kubernetes master is running at http://172.16.238.194:8080
 ```
 
+Run some pods
+
+```
+kubectl run -s http://172.16.238.194:8080 memcached --image=memcached
+CONTROLLER   CONTAINER(S)   IMAGE(S)    SELECTOR        REPLICAS
+memcached    memcached      memcached   run=memcached   1
+```
+
+```
+kubectl get pods -s http://172.16.238.194:8080
+NAME              READY     REASON    RESTARTS   AGE
+memcached-6ipnq   1/1       Running   0          25s
+```
+
 ## Download Kubernetes binaries
 
 ```
