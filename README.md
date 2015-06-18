@@ -1,6 +1,6 @@
 # Kubernetes Docker Files
 
-Build Docker images from upstream binaries.
+Build Docker images from upstream binaries. Also see the guide on [converting Docker images to ACI](docs/aci.md)
 
 ## Single node Kubernetes cluster
 
