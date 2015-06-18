@@ -47,6 +47,16 @@ docker2aci docker://quay.io/kelseyhightower/kube-scheduler:0.19.0
 
 ## Patch the ACI manifest using actool
 
+After running the commands in this section you will have the following ACIs:
+
+```
+kube-apiserver-0.19.0-linux-amd64.aci
+kube-controller-manager-0.19.0-linux-amd64.aci
+kube-proxy-0.19.0-linux-amd64.aci
+kube-scheduler-0.19.0-linux-amd64.aci
+kubelet-0.19.0-linux-amd64.aci
+```
+
 ### kube-apiserver
 
 ```
