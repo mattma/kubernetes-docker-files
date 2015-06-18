@@ -7,9 +7,20 @@ Build Docker images from upstream binaries.
 tldr; The following commands will stand up a single node Kubernetes cluster using [docker-compose](https://github.com/docker/compose)
 
 ```
+export DOCKER_HOST="tcp://172.16.238.194:2375"
+```
+
+```
 git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
 cd kubernetes-docker-files
 docker-compose up -d
+```
+
+Testing out the cluster:
+
+```
+kubectl cluster-info -s http://172.16.238.194:8080
+Kubernetes master is running at http://172.16.238.194:8080
 ```
 
 ## Download Kubernetes binaries
