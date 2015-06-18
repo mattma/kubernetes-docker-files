@@ -113,3 +113,40 @@ kubelet-0.19.0-linux-amd64.aci
 ```
 
 Note: Docker binds in `/etc/resolv.conf` from the host. rkt does not, so we need to "patch" it in.
+
+## Signing the ACIs
+
+Export and upload the public key:
+
+```
+gpg --armor --export release@rktscience.io > pubkeys.gpg
+```
+
+Sign the images:
+
+```
+for aci in kube-apiserver kube-controller-manager kube-proxy kube-scheduler kubelet; do
+  gpg -u release@rktscience.io --armor --detach-sig \
+  --output ${aci}-0.19.0-linux-amd64.aci.asc \
+  --detach-sig ${aci}-0.19.0-linux-amd64.aci
+done
+```
+
+## Running the ACIs
+
+Trust the rktscience signing key:
+
+```
+sudo rkt trust --root https://storage.googleapis.com/rktscience/pubkeys.gpg
+```
+
+```
+Prefix: ""
+Key: "https://storage.googleapis.com/rktscience/pubkeys.gpg"
+GPG key fingerprint is: CDFF 0C6A EE50 D93A 5E71  A738 B6F7 807B 1EB4 DDAE
+    Subkey fingerprint: 8FB7 603F 1238 E44C B127  6028 1F84 E96C 07B2 596F
+	Rocket Science (ACI Builder) <release@rktscience.io>
+Are you sure you want to trust this key (yes/no)? yes
+Trusting "https://storage.googleapis.com/rktscience/pubkeys.gpg" for prefix "".
+Added root key at "/etc/rkt/trustedkeys/root.d/cdff0c6aee50d93a5e71a738b6f7807b1eb4ddae"
+```
