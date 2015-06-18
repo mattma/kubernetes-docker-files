@@ -47,4 +47,42 @@ docker2aci docker://quay.io/kelseyhightower/kube-scheduler:0.19.0
 
 ## Patch the ACI manifest using actool
 
-TODO
+### kube-apiserver
+
+```
+actool patch-manifest --name=kube-apiserver \
+kelseyhightower-kube-apiserver-0.19.0.aci \
+kube-apiserver-0.19.0-linux-amd64.aci
+```
+
+### kube-controller-manager 
+
+```
+actool patch-manifest --name=kube-controller-manager \
+kelseyhightower-kube-controller-manager-0.19.0.aci \
+kube-controller-manager-0.19.0-linux-amd64.aci
+```
+
+### kube-proxy
+
+```
+actool patch-manifest --name=kube-proxy --capability=CAP_NET_ADMIN \
+kelseyhightower-kube-proxy-0.19.0.aci \
+kube-proxy-0.19.0-linux-amd64.aci
+```
+
+### kube-scheduler
+
+```
+actool patch-manifest --name=kube-scheduler \
+kelseyhightower-kube-scheduler-0.19.0.aci \
+kube-scheduler-0.19.0-linux-amd64.aci
+```
+
+### kubelet
+
+```
+actool patch-manifest --name=kubelet --capability=CAP_NET_ADMIN \
+kelseyhightower-kubelet-0.19.0.aci \
+kubelet-0.19.0-linux-amd64.aci
+```

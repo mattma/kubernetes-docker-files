@@ -85,7 +85,7 @@ docker build -t quay.io/kelseyhightower/kubelet:0.19.0 .
 ### Run
 
 ```
-sudo docker run --detach --net=host --name=kubelet \
+sudo docker run --detach --net=host --name=kubelet --privileged \
 --restart=always \
 --volume=/usr/bin/nsenter:/nsenter \
 --volume=/usr:/usr \
