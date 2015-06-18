@@ -1,10 +1,7 @@
-FROM debian:jessie
+FROM scratch
 MAINTAINER Kelsey Hightower <kelsey.hightower@gmail.com>
+COPY kube-apiserver /kube-apiserver
 
-RUN apt-get update
-RUN apt-get -y -q install ca-certificates
+VOLUME ["/etc/kubernetes", "/etc/ssl/certs", "/var/run/kubernetes"]
 
-COPY kube-apiserver /usr/bin/kube-apiserver
-RUN chmod 755 /usr/bin/kube-apiserver
-
-ENTRYPOINT ["/usr/bin/kube-apiserver"]
+ENTRYPOINT ["/kube-apiserver"]

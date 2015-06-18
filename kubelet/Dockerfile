@@ -1,10 +1,5 @@
-FROM centos
-
-RUN yum install -y sysvinit-tools
-ADD kubelet /kubelet
-RUN chmod a+rx /kubelet
-RUN cp /usr/bin/nsenter /nsenter
-
-VOLUME /var/lib/docker
-VOLUME /var/lib/kubelet
-CMD [ "/kubelet" ]
+FROM scratch
+MAINTAINER Kelsey Hightower <kelsey.hightower@gmail.com>
+COPY kubelet /kubelet
+VOLUME ["/var/lib/docker", "/var/lib/kubelet", "/var/run", "/sys", "/etc/kubernetes", "/etc/ssl/certs" "/rootfs", "/nsenter", "/usr", "/lib64"]
+ENTRYPOINT [ "/kubelet" ]

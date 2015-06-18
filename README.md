@@ -44,8 +44,13 @@ docker build -t quay.io/kelseyhightower/kubelet:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kubelet \
 --restart=always \
+--volume=/usr/bin/nsenter:/nsenter \
+--volume=/usr:/usr \
+--volume=/lib64:/lib64 \
 --volume=/:/rootfs:ro \
---volume=/etc/kubernetes/manifests:/etc/kubernetes/manifests \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/etc/os-release:/etc/os-release \
+--volume=/usr/share/ca-certificates/:/etc/ssl/certs \
 --volume=/sys:/sys:ro \
 --volume=/var/lib/docker/:/var/lib/docker:ro \
 --volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
@@ -55,8 +60,6 @@ quay.io/kelseyhightower/kubelet:0.19.0 \
 --api-servers=http://localhost:8080 \
 --enable-server \
 --hostname-override=127.0.0.1 \
---config=/etc/kubernetes/manifests \
---machine-id-file=/rootfs/etc/machine-id \
 --v=2
 ```
 
@@ -81,6 +84,9 @@ docker build -t quay.io/kelseyhightower/kube-apiserver:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-apiserver \
 --restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
+--volume=/var/run/kubernetes:/var/run/kubernetes \
 quay.io/kelseyhightower/kube-apiserver:0.19.0 \
 --etcd-servers=http://127.0.0.1:2379 \
 --insecure-bind-address=0.0.0.0 \
@@ -111,6 +117,8 @@ docker build -t quay.io/kelseyhightower/kube-controller-manager:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-controller-manager \
 --restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
 quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
@@ -138,6 +146,10 @@ docker build -t quay.io/kelseyhightower/kube-proxy:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-proxy --privileged \
 --restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
+--volume=/usr:/usr \
+--volume=/lib64:/lib64 \
 quay.io/kelseyhightower/kube-proxy:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
@@ -165,6 +177,8 @@ docker build -t quay.io/kelseyhightower/kube-scheduler:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-scheduler \
 --restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates/:/etc/ssl/certs \
 quay.io/kelseyhightower/kube-scheduler:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
