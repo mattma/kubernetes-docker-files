@@ -37,21 +37,39 @@ NAME              READY     REASON    RESTARTS   AGE
 memcached-6ipnq   1/1       Running   0          25s
 ```
 
-## Download Kubernetes binaries
+## Building the Docker Images
+
+Running the build script will produce the following docker images:
 
 ```
-for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
-  curl -o ${b} -L https://storage.googleapis.com/kubernetes-release/release/v0.19.0/bin/linux/amd64/${b}
-done
+kubelet
+kube-controller-manager
+kube-scheduler
+kube-proxy
+kube-apiserver
 ```
 
-## etcd
+```
+./build
+```
+
+### Tag and release
+
+```
+docker tag kubelet:0.19.1 quay.io/kelseyhightower/kubelet:0.19.1
+```
+
+```
+docker push quay.io/kelseyhightower/kubelet:0.19.1
+```
+
+## Running the containers
+
+### etcd
 
 ```
 mkdir -p /var/lib/etcd
 ```
-
-### Run
 
 ```
 sudo docker run --detach --net=host --privileged --name=etcd \
@@ -66,23 +84,7 @@ quay.io/coreos/etcd:v2.0.11 \
 --name etcd0
 ```
 
-## kubelet
-
-### Build
-
-```
-cp kubelet dockerfiles/kubelet/
-```
-
-```
-cd dockerfiles/kubelet/
-```
-
-```
-docker build -t quay.io/kelseyhightower/kubelet:0.19.0 .
-```
-
-### Run
+### kubelet
 
 ```
 sudo docker run --detach --net=host --name=kubelet --privileged \
@@ -108,23 +110,7 @@ quay.io/kelseyhightower/kubelet:0.19.0 \
 --v=2
 ```
 
-## kube-apiserver
-
-### Build
-
-```
-cp kube-apiserver dockerfiles/kube-apiserver/
-```
-
-```
-cd dockerfiles/kube-apiserver/
-```
-
-```
-docker build -t quay.io/kelseyhightower/kube-apiserver:0.19.0 .
-```
-
-### Run
+### kube-apiserver
 
 ```
 sudo docker run --detach --net=host --name=kube-apiserver \
@@ -141,23 +127,7 @@ quay.io/kelseyhightower/kube-apiserver:0.19.0 \
 --v=2
 ```
 
-## kube-controller-manager
-
-### Build
-
-```
-cp kube-controller-manager dockerfiles/kube-controller-manager/
-```
-
-```
-cd dockerfiles/kube-controller-manager/
-```
-
-```
-docker build -t quay.io/kelseyhightower/kube-controller-manager:0.19.0 .
-```
-
-### Run
+### kube-controller-manager
 
 ```
 sudo docker run --detach --net=host --name=kube-controller-manager \
@@ -170,23 +140,7 @@ quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
 --v=2
 ```
 
-## kube-proxy
-
-### Build
-
-```
-cp kube-proxy dockerfiles/kube-proxy/
-```
-
-```
-cd dockerfiles/kube-proxy/
-```
-
-```
-docker build -t quay.io/kelseyhightower/kube-proxy:0.19.0 .
-```
-
-### Run
+### kube-proxy
 
 ```
 sudo docker run --detach --net=host --name=kube-proxy --privileged \
@@ -201,23 +155,7 @@ quay.io/kelseyhightower/kube-proxy:0.19.0 \
 --v=2
 ```
 
-## kube-scheduler
-
-### Build
-
-```
-cp kube-scheduler dockerfiles/kube-scheduler/
-```
-
-```
-cd dockerfiles/kube-scheduler/
-```
-
-```
-docker build -t quay.io/kelseyhightower/kube-scheduler:0.19.0 .
-```
-
-### Run
+### kube-scheduler
 
 ```
 sudo docker run --detach --net=host --name=kube-scheduler \
