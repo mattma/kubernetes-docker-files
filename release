@@ -8,9 +8,6 @@ fi
 source settings
 
 for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
-  curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
-  chmod +x ${b}/${b}
-  pushd ${b}/
-  docker build -t ${b}:${KUBERNETES_VERSION} .
-  popd
+  docker tag -f ${b}:${KUBERNETES_VERSION} ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USERNAME}/${b}:${KUBERNETES_VERSION}
+  docker push ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USERNAME}/${b}:${KUBERNETES_VERSION}
 done

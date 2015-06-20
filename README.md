@@ -1,71 +1,57 @@
 # Kubernetes Docker Files
 
-Build Docker images from upstream binaries. Also see the guide on [converting Docker images to ACIs and running them with rkt](docs/aci.md)
+Build Docker images from upstream binaries.
 
-## Single node Kubernetes cluster
+- [Build](#build)
+- [Release](#release)
+- [Run](#run)
+  - [Docker CLI](#docker-cli)
+  - [Docker Compose](#docker-compose)
+- [Covert to ACIs](docs/aci.md)
 
-tldr; The following commands will stand up a single node Kubernetes cluster using [docker-compose](https://github.com/docker/compose)
+## Build
 
-```
-export DOCKER_HOST="tcp://172.16.238.194:2375"
-```
-
-```
-git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
-cd kubernetes-docker-files
-docker-compose up -d
-```
-
-Testing out the cluster:
+Edit the `settings` file.
 
 ```
-kubectl cluster-info -s http://172.16.238.194:8080
-Kubernetes master is running at http://172.16.238.194:8080
+KUBERNETES_VERSION="0.19.1"
+DOCKER_REGISTRY_HOST="quay.io"
+DOCKER_REGISTRY_USERNAME="kelseyhightower"
 ```
 
-Run some pods
-
-```
-kubectl run -s http://172.16.238.194:8080 memcached --image=memcached
-CONTROLLER   CONTAINER(S)   IMAGE(S)    SELECTOR        REPLICAS
-memcached    memcached      memcached   run=memcached   1
-```
-
-```
-kubectl get pods -s http://172.16.238.194:8080
-NAME              READY     REASON    RESTARTS   AGE
-memcached-6ipnq   1/1       Running   0          25s
-```
-
-## Building the Docker Images
-
-Running the build script will produce the following docker images:
-
-```
-kubelet
-kube-controller-manager
-kube-scheduler
-kube-proxy
-kube-apiserver
-```
+Run the build script.
 
 ```
 ./build
 ```
 
-### Tag and release
+## Release
+
+Edit the `settings` file.
 
 ```
-docker tag kubelet:0.19.1 quay.io/kelseyhightower/kubelet:0.19.1
+KUBERNETES_VERSION="0.19.1"
+DOCKER_REGISTRY_HOST="quay.io"
+DOCKER_REGISTRY_USERNAME="kelseyhightower"
 ```
 
+Run the release script.
+
 ```
-docker push quay.io/kelseyhightower/kubelet:0.19.1
+./release
 ```
 
-## Running the containers
+## Run
 
-### etcd
+### Docker CLI
+
+Use the docker cli tool to bootstrap a single node Kubernetes cluster.
+
+```
+export DOCKER_HOST="tcp://172.16.238.194:2375"
+```
+
+Start etcd.
 
 ```
 mkdir -p /var/lib/etcd
@@ -84,7 +70,50 @@ quay.io/coreos/etcd:v2.0.11 \
 --name etcd0
 ```
 
-### kubelet
+Start the Kubernetes API service.
+
+```
+sudo docker run --detach --net=host --name=kube-apiserver \
+--restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
+--volume=/var/run/kubernetes:/var/run/kubernetes \
+quay.io/kelseyhightower/kube-apiserver:0.19.0 \
+--etcd-servers=http://127.0.0.1:2379 \
+--insecure-bind-address=0.0.0.0 \
+--insecure-port=8080 \
+--logtostderr=true \
+--service-cluster-ip-range=10.200.20.0/24 \
+--v=2
+```
+
+Start the Kubernetes controller manager service.
+
+```
+sudo docker run --detach --net=host --name=kube-controller-manager \
+--restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
+quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
+--logtostderr=true \
+--master=http://127.0.0.1:8080 \
+--v=2
+```
+
+Start the Kubernetes scheduler.
+
+```
+sudo docker run --detach --net=host --name=kube-scheduler \
+--restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates/:/etc/ssl/certs \
+quay.io/kelseyhightower/kube-scheduler:0.19.0 \
+--logtostderr=true \
+--master=http://127.0.0.1:8080 \
+--v=2
+```
+
+Start the Kubernetes kubelet service.
 
 ```
 sudo docker run --detach --net=host --name=kubelet --privileged \
@@ -110,37 +139,7 @@ quay.io/kelseyhightower/kubelet:0.19.0 \
 --v=2
 ```
 
-### kube-apiserver
-
-```
-sudo docker run --detach --net=host --name=kube-apiserver \
---restart=always \
---volume=/etc/kubernetes:/etc/kubernetes \
---volume=/usr/share/ca-certificates:/etc/ssl/certs \
---volume=/var/run/kubernetes:/var/run/kubernetes \
-quay.io/kelseyhightower/kube-apiserver:0.19.0 \
---etcd-servers=http://127.0.0.1:2379 \
---insecure-bind-address=0.0.0.0 \
---insecure-port=8080 \
---logtostderr=true \
---service-cluster-ip-range=10.200.20.0/24 \
---v=2
-```
-
-### kube-controller-manager
-
-```
-sudo docker run --detach --net=host --name=kube-controller-manager \
---restart=always \
---volume=/etc/kubernetes:/etc/kubernetes \
---volume=/usr/share/ca-certificates:/etc/ssl/certs \
-quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
---logtostderr=true \
---master=http://127.0.0.1:8080 \
---v=2
-```
-
-### kube-proxy
+Start the Kubernetes proxy service.
 
 ```
 sudo docker run --detach --net=host --name=kube-proxy --privileged \
@@ -155,15 +154,46 @@ quay.io/kelseyhightower/kube-proxy:0.19.0 \
 --v=2
 ```
 
-### kube-scheduler
+### Docker Compose
+
+Use [docker-compose](https://github.com/docker/compose) to bootstrap a single node Kubernetes cluster.
 
 ```
-sudo docker run --detach --net=host --name=kube-scheduler \
---restart=always \
---volume=/etc/kubernetes:/etc/kubernetes \
---volume=/usr/share/ca-certificates/:/etc/ssl/certs \
-quay.io/kelseyhightower/kube-scheduler:0.19.0 \
---logtostderr=true \
---master=http://127.0.0.1:8080 \
---v=2
+export DOCKER_HOST="tcp://172.16.238.194:2375"
+```
+
+```
+git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
+cd kubernetes-docker-files
+docker-compose up -d
+```
+
+## Testing
+
+Download kubectl.
+
+```
+curl -o kubectl -L https://storage.googleapis.com/kubernetes-release/release/v0.19.1/bin/linux/amd64/kubectl
+chmod +x kubectl
+```
+
+Test the kubectl client against the Kubernetes API server.
+
+```
+kubectl cluster-info -s http://172.16.238.194:8080
+Kubernetes master is running at http://172.16.238.194:8080
+```
+
+Run some pods
+
+```
+kubectl run -s http://172.16.238.194:8080 memcached --image=memcached
+CONTROLLER   CONTAINER(S)   IMAGE(S)    SELECTOR        REPLICAS
+memcached    memcached      memcached   run=memcached   1
+```
+
+```
+kubectl get pods -s http://172.16.238.194:8080
+NAME              READY     REASON    RESTARTS   AGE
+memcached-6ipnq   1/1       Running   0          25s
 ```
