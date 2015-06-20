@@ -54,10 +54,6 @@ export DOCKER_HOST="tcp://172.16.238.194:2375"
 Start etcd.
 
 ```
-mkdir -p /var/lib/etcd
-```
-
-```
 sudo docker run --detach --net=host --privileged --name=etcd \
 --restart=always \
 --volume=/var/lib/etcd:/var/lib/etcd \
