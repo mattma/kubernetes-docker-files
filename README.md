@@ -160,7 +160,7 @@ chmod +x docker-compose
 Start the Kubernetes single node stack.
 
 ```
-docker-compose up -d
+docker-compose -p kubernetes -f docker-compose.yml up -d
 ```
 
 ## Testing
