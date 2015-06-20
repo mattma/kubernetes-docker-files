@@ -150,6 +150,15 @@ quay.io/kelseyhightower/kube-proxy:0.19.1 \
 
 Use [docker-compose](https://github.com/docker/compose) to bootstrap a single node Kubernetes cluster.
 
+Download docker-compose.
+
+```
+curl -o docker-compose -L https://github.com/docker/compose/releases/download/1.3.0/docker-compose-Linux-x86_64
+chmod +x docker-compose
+```
+
+Start the Kubernetes single node stack.
+
 ```
 docker-compose up -d
 ```
