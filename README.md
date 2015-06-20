@@ -74,7 +74,7 @@ sudo docker run --detach --net=host --name=kube-apiserver \
 --volume=/etc/kubernetes:/etc/kubernetes \
 --volume=/usr/share/ca-certificates:/etc/ssl/certs \
 --volume=/var/run/kubernetes:/var/run/kubernetes \
-quay.io/kelseyhightower/kube-apiserver:0.19.0 \
+quay.io/kelseyhightower/kube-apiserver:0.19.1 \
 --etcd-servers=http://127.0.0.1:2379 \
 --insecure-bind-address=0.0.0.0 \
 --insecure-port=8080 \
@@ -90,7 +90,7 @@ sudo docker run --detach --net=host --name=kube-controller-manager \
 --restart=always \
 --volume=/etc/kubernetes:/etc/kubernetes \
 --volume=/usr/share/ca-certificates:/etc/ssl/certs \
-quay.io/kelseyhightower/kube-controller-manager:0.19.0 \
+quay.io/kelseyhightower/kube-controller-manager:0.19.1 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
 --v=2
@@ -103,7 +103,7 @@ sudo docker run --detach --net=host --name=kube-scheduler \
 --restart=always \
 --volume=/etc/kubernetes:/etc/kubernetes \
 --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
-quay.io/kelseyhightower/kube-scheduler:0.19.0 \
+quay.io/kelseyhightower/kube-scheduler:0.19.1 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
 --v=2
@@ -125,7 +125,7 @@ sudo docker run --detach --net=host --name=kubelet --privileged \
 --volume=/var/lib/docker/:/var/lib/docker:ro \
 --volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
 --volume=/var/run:/var/run:rw \
-quay.io/kelseyhightower/kubelet:0.19.0 \
+quay.io/kelseyhightower/kubelet:0.19.1 \
 --address=0.0.0.0 \
 --api-servers=http://localhost:8080 \
 --containerized \
@@ -144,7 +144,7 @@ sudo docker run --detach --net=host --name=kube-proxy --privileged \
 --volume=/usr/share/ca-certificates:/etc/ssl/certs \
 --volume=/usr:/usr \
 --volume=/lib64:/lib64 \
-quay.io/kelseyhightower/kube-proxy:0.19.0 \
+quay.io/kelseyhightower/kube-proxy:0.19.1 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
 --v=2
