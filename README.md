@@ -47,10 +47,6 @@ Run the release script.
 
 Use the docker cli tool to bootstrap a single node Kubernetes cluster.
 
-```
-export DOCKER_HOST="tcp://172.16.238.194:2375"
-```
-
 Start etcd.
 
 ```
@@ -155,10 +151,6 @@ quay.io/kelseyhightower/kube-proxy:0.19.1 \
 Use [docker-compose](https://github.com/docker/compose) to bootstrap a single node Kubernetes cluster.
 
 ```
-export DOCKER_HOST="tcp://172.16.238.194:2375"
-```
-
-```
 git clone https://github.com/kelseyhightower/kubernetes-docker-files.git
 cd kubernetes-docker-files
 docker-compose up -d
@@ -176,20 +168,20 @@ chmod +x kubectl
 Test the kubectl client against the Kubernetes API server.
 
 ```
-kubectl cluster-info -s http://172.16.238.194:8080
-Kubernetes master is running at http://172.16.238.194:8080
+kubectl cluster-info
+Kubernetes master is running at http://127.0.0.1:8080
 ```
 
 Run some pods
 
 ```
-kubectl run -s http://172.16.238.194:8080 memcached --image=memcached
+kubectl run nginx --image=nginx
 CONTROLLER   CONTAINER(S)   IMAGE(S)    SELECTOR        REPLICAS
-memcached    memcached      memcached   run=memcached   1
+nginx        nginx          nginx       run=nginx       1
 ```
 
 ```
-kubectl get pods -s http://172.16.238.194:8080
+kubectl get pods
 NAME              READY     REASON    RESTARTS   AGE
-memcached-6ipnq   1/1       Running   0          25s
+nginx-6ipnq       1/1       Running   0          25s
 ```
