@@ -127,7 +127,7 @@ sudo docker run --detach --net=host --name=kubelet --privileged \
 --volume=/var/run:/var/run:rw \
 quay.io/kelseyhightower/kubelet:0.19.1 \
 --address=0.0.0.0 \
---api-servers=http://localhost:8080 \
+--api-servers=http://127.0.0.1:8080 \
 --containerized \
 --enable-server \
 --hostname-override=127.0.0.1 \
