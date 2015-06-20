@@ -1,0 +1,11 @@
+#!/bin/sh
+
+KUBERNETES_VERSION="0.19.1"
+
+for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
+  curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
+  chmod +x ${b}/${b}
+  pushd ${b}/
+  docker build -t quay.io/kelseyhightower/${b}:${KUBERNETES_VERSION} .
+  popd
+done
