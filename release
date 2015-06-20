@@ -5,7 +5,7 @@ if [ ! -f settings ]; then
   exit 1
 fi
 
-source settings
+source ./settings
 
 for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
   docker tag -f ${b}:${KUBERNETES_VERSION} ${DOCKER_REGISTRY_HOST}/${DOCKER_REGISTRY_USERNAME}/${b}:${KUBERNETES_VERSION}
