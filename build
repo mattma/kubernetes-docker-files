@@ -6,6 +6,6 @@ for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubele
   curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
   chmod +x ${b}/${b}
   pushd ${b}/
-  docker build -t quay.io/kelseyhightower/${b}:${KUBERNETES_VERSION} .
+  docker build -t ${b}:${KUBERNETES_VERSION} .
   popd
 done
