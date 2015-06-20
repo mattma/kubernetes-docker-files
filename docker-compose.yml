@@ -51,7 +51,7 @@ scheduler:
 kubelet:
   command: >
     --address=0.0.0.0
-    --api-servers=http://localhost:8080
+    --api-servers=http://127.0.0.1:8080
     --containerized
     --enable-server
     --hostname-override=127.0.0.1
