@@ -6,9 +6,12 @@ if [ ! -f settings ]; then
 fi
 
 source ./settings
+KUBERNETES_VERSION=$(curl https://storage.googleapis.com/kubernetes-release/ci/latest.txt)
+KUBERNETES_VERSION=${KUBERNETES_VERSION:1}
+echo $KUBERNETES_VERSION > version
 
 for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
-  curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
+  curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/ci/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
   chmod +x ${b}/${b}
   pushd ${b}/
   docker build -t ${b}:${KUBERNETES_VERSION} .
