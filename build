@@ -1,5 +1,9 @@
 #!/bin/sh
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
 if [ ! -f settings ]; then
   echo "Error loading configuration; settings file missing."
   exit 1
@@ -7,8 +11,8 @@ fi
 
 source ./settings
 
-for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet; do
-  curl -o ${b}/${b} -L https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/${b}
+for b in kube-apiserver kube-proxy kube-scheduler kube-controller-manager kubelet kubectl; do
+  curl -o ${b}/${b} -L ${KUBERNETES_RELEASE_URL}/${b}
   chmod +x ${b}/${b}
   pushd ${b}/
   docker build -t ${b}:${KUBERNETES_VERSION} .
