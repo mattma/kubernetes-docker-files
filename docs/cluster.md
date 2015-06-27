@@ -1,6 +1,10 @@
-# Mutil-Node Kubernetes Cluster with Docker
+# Kubernetes Cluster with Docker
 
-## Node provisioning
+## Status: Work In Progress
+
+The following guide will bootstrap a 6 node Kubernetes cluster using Docker and Docker Compose on GCE.
+
+## Provision 6 GCE Nodes
 
 ```
 for i in {0..5}; do
