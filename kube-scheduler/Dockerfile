@@ -1,10 +1,5 @@
-FROM debian:jessie
+FROM scratch
 MAINTAINER Kelsey Hightower <kelsey.hightower@gmail.com>
-
-RUN apt-get update
-RUN apt-get -y -q install ca-certificates
-
-COPY kube-scheduler /usr/bin/kube-scheduler
-RUN chmod 755 /usr/bin/kube-scheduler
-
-ENTRYPOINT ["/usr/bin/kube-scheduler"]
+COPY kube-scheduler kube-scheduler
+VOLUME /etc/kubernetes /etc/ssl/certs
+ENTRYPOINT ["/kube-scheduler"]

@@ -1,0 +1,22 @@
+[Unit]
+Description=Kubernetes Proxy
+Documentation=https://github.com/GoogleCloudPlatform/kubernetes
+Requires=kube-apiserver.service
+After=kube-apiserver.service
+
+[Service]
+ExecStart=/usr/bin/rkt run \
+ --volume=volume-etc-kubernetes,kind=host,source=/etc/kubernetes \
+ --volume=volume-etc-ssl-certs,kind=host,source=/usr/share/ca-certificates \
+ --volume=volume-lib64,kind=host,source=/lib64 \
+ --volume=volume-usr,kind=host,source=/usr \
+ https://storage.googleapis.com/rktscience/kube-proxy-0.19.0-linux-amd64.aci \
+ -- \
+ --logtostderr=true \
+ --master=http://127.0.0.1:8080 \
+ --v=2
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
