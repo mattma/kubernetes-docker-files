@@ -138,6 +138,10 @@ docker build -t quay.io/kelseyhightower/kube-proxy:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-proxy --privileged \
 --restart=always \
+--volume=/etc/kubernetes:/etc/kubernetes \
+--volume=/usr/share/ca-certificates:/etc/ssl/certs \
+--volume=/usr/sbin/iptables:/usr/sbin/iptables \
+--volume=/lib64:/lib64 \
 quay.io/kelseyhightower/kube-proxy:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
@@ -165,6 +169,8 @@ docker build -t quay.io/kelseyhightower/kube-scheduler:0.19.0 .
 ```
 sudo docker run --detach --net=host --name=kube-scheduler \
 --restart=always \
+--volume /etc/kubernetes:/etc/kubernetes \
+--volume /usr/share/ca-certificates/:/etc/ssl/certs \
 quay.io/kelseyhightower/kube-scheduler:0.19.0 \
 --logtostderr=true \
 --master=http://127.0.0.1:8080 \
