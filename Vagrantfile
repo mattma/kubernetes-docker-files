@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 box = "phusion/ubuntu-14.04-amd64"
 box_url = "https://atlas.hashicorp.com/phusion/boxes/ubuntu-14.04-amd64/versions/2014.04.30/providers/virtualbox.box"
 
-shared_path = "shared/"
+shared_path = "."
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = box
@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  config.vm.synced_folder shared_path, "/home/vagrant/shared/"
+  config.vm.synced_folder shared_path, "/home/vagrant/kube/"
 
   # config.vm.synced_folder shared_path, "/home/vagrant/shared/", :mount_options => [ "dmode=777", "fmode=777" ]
 
@@ -91,7 +91,7 @@ chmod +x /usr/local/bin/docker-compose
 ###
 
 if test -e /home/vagrant/shared/dockercfg ; then
-  cp -r /home/vagrant/shared/dockercfg /home/vagrant/.dockercfg
+  cp -r /home/vagrant/kube/shared/dockercfg /home/vagrant/.dockercfg
   chown -R vagrant /home/vagrant/.dockercfg
 fi
 
@@ -104,8 +104,8 @@ rm -rf /home/vagrant/.bashrc
 rm -rf /home/vagrant/.gitconfig
 rm -rf /home/vagrant/.scripts
 
-ln -s /home/vagrant/shared/boilerplate/root/.bashrc /home/vagrant/
-ln -s /home/vagrant/shared/boilerplate/root/.scripts /home/vagrant/
-ln -s /home/vagrant/shared/boilerplate/root/.gitconfig /home/vagrant/
+ln -s /home/vagrant/kube/shared/boilerplate/root/.bashrc /home/vagrant/
+ln -s /home/vagrant/kube/shared/boilerplate/root/.scripts /home/vagrant/
+ln -s /home/vagrant/kube/shared/boilerplate/root/.gitconfig /home/vagrant/
 
 CONTENTS
