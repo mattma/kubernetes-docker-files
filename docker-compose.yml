@@ -20,7 +20,7 @@ apiserver:
     --logtostderr=true
     --service-cluster-ip-range=10.200.20.0/24
     --v=2
-  image: "mattma/kube-apiserver:1.0.0"
+  image: "mattma/kube-apiserver:1.0.1"
   net: "host"
   restart: "always"
   volumes:
@@ -33,7 +33,7 @@ controllermanager:
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "mattma/kube-controller-manager:1.0.0"
+  image: "mattma/kube-controller-manager:1.0.1"
   net: "host"
   restart: "always"
   volumes:
@@ -45,7 +45,7 @@ scheduler:
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "mattma/kube-scheduler:1.0.0"
+  image: "mattma/kube-scheduler:1.0.1"
   net: "host"
   restart: "always"
   volumes:
@@ -61,7 +61,7 @@ kubelet:
     --hostname-override=127.0.0.1
     --machine-id-file=/rootfs/etc/machine-id
     --v=2
-  image: "mattma/kubelet:1.0.0"
+  image: "mattma/kubelet:1.0.1"
   net: "host"
   privileged: true
   restart: "always"
@@ -83,7 +83,7 @@ proxy:
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "mattma/kube-proxy:1.0.0"
+  image: "mattma/kube-proxy:1.0.1"
   net: "host"
   privileged: true
   restart: "always"
