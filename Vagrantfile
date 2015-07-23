@@ -90,7 +90,7 @@ chmod +x /usr/local/bin/docker-compose
 # Setup dockercfg auth key
 ###
 
-if test -e /home/vagrant/shared/dockercfg ; then
+if test -e /home/vagrant/kube/shared/dockercfg ; then
   cp -r /home/vagrant/kube/shared/dockercfg /home/vagrant/.dockercfg
   chown -R vagrant /home/vagrant/.dockercfg
 fi
