@@ -1,16 +1,17 @@
 etcd:
   command: >
-    --advertise-client-urls http://127.0.0.1:2379 
-    --data-dir /var/lib/etcd 
-    --listen-client-urls http://127.0.0.1:2379 
-    --listen-peer-urls http://127.0.0.1:2380 
+    --advertise-client-urls http://127.0.0.1:2379
+    --data-dir /var/lib/etcd
+    --listen-client-urls http://127.0.0.1:2379
+    --listen-peer-urls http://127.0.0.1:2380
     --name etcd0
   image: "quay.io/coreos/etcd:v2.0.12"
   net: "host"
   restart: "always"
   volumes:
-    - "/var/lib/etcd:/var/lib/etcd"
-    - "/usr/share/ca-certificates/:/etc/ssl/certs"
+    - /var/lib/etcd:/var/lib/etcd
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+
 apiserver:
   command: >
     --etcd-servers=http://127.0.0.1:2379
@@ -18,36 +19,39 @@ apiserver:
     --insecure-port=8080
     --logtostderr=true
     --service-cluster-ip-range=10.200.20.0/24
-    --v=2 
-  image: "kelseyhightower/kube-apiserver:0.20.0"
+    --v=2
+  image: "mattma/kube-apiserver:1.0.0"
   net: "host"
   restart: "always"
   volumes:
-    - "/etc/kubernetes:/etc/kubernetes"
-    - "/usr/share/ca-certificates:/etc/ssl/certs"
-    - "/var/run/kubernetes:/var/run/kubernetes"
+    - /etc/kubernetes:/etc/kubernetes
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+    - /var/run/kubernetes:/var/run/kubernetes
+
 controllermanager:
   command: >
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "kelseyhightower/kube-controller-manager:0.20.0"
+  image: "mattma/kube-controller-manager:1.0.0"
   net: "host"
   restart: "always"
   volumes:
-    - "/etc/kubernetes:/etc/kubernetes"
-    - "/usr/share/ca-certificates:/etc/ssl/certs"
+    - /etc/kubernetes:/etc/kubernetes
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+
 scheduler:
   command: >
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "kelseyhightower/kube-scheduler:0.20.0"
+  image: "mattma/kube-scheduler:1.0.0"
   net: "host"
   restart: "always"
   volumes:
-    - "/etc/kubernetes:/etc/kubernetes"
-    - "/usr/share/ca-certificates:/etc/ssl/certs"
+    - /etc/kubernetes:/etc/kubernetes
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+
 kubelet:
   command: >
     --address=0.0.0.0
@@ -57,33 +61,34 @@ kubelet:
     --hostname-override=127.0.0.1
     --machine-id-file=/rootfs/etc/machine-id
     --v=2
-  image: "kelseyhightower/kubelet:0.20.0"
+  image: "mattma/kubelet:1.0.0"
   net: "host"
   privileged: true
   restart: "always"
   volumes:
-    - "/usr/bin/nsenter:/nsenter"
-    - "/usr:/usr"
-    - "/lib64:/lib64"
-    - "/:/rootfs:ro"
-    - "/etc/kubernetes:/etc/kubernetes"
-    - "/etc/os-release:/etc/os-release"
-    - "/usr/share/ca-certificates/:/etc/ssl/certs"
-    - "/sys:/sys:ro"
-    - "/var/lib/docker/:/var/lib/docker:ro"
-    - "/var/lib/kubelet/:/var/lib/kubelet:rw"
-    - "/var/run:/var/run:rw"
+    - /usr/bin/nsenter:/nsenter
+    - /usr:/usr
+    - /lib64:/lib64
+    - /:/rootfs:ro
+    - /etc/kubernetes:/etc/kubernetes
+    - /etc/os-release:/etc/os-release
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /var/lib/kubelet/:/var/lib/kubelet:rw
+    - /var/run:/var/run:rw
+
 proxy:
   command: >
     --logtostderr=true
     --master=http://127.0.0.1:8080
     --v=2
-  image: "kelseyhightower/kube-proxy:0.20.0"
+  image: "mattma/kube-proxy:1.0.0"
   net: "host"
   privileged: true
   restart: "always"
   volumes:
-    - "/etc/kubernetes:/etc/kubernetes"
-    - "/usr/share/ca-certificates:/etc/ssl/certs"
-    - "/usr:/usr"
-    - "/lib64:/lib64"
+    - /etc/kubernetes:/etc/kubernetes
+    - ~/.boot2docker/certs/boot2docker-vm/:/etc/ssl/certs
+    - /usr:/usr
+    - /lib64:/lib64
