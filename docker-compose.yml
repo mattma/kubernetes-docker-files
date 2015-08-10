@@ -14,12 +14,13 @@ etcd:
 
 apiserver:
   command: >
-    --etcd-servers=http://127.0.0.1:2379
+    --allow_privileged=true
     --insecure-bind-address=0.0.0.0
     --insecure-port=8080
+    --kubelet_https=true
+    --service-cluster-ip-range=10.100.0.0/16
+    --etcd-servers=http://172.17.8.100:2379
     --logtostderr=true
-    --service-cluster-ip-range=10.200.20.0/24
-    --v=2
   image: "mattma/kube-apiserver:1.0.1"
   net: "host"
   restart: "always"
@@ -30,9 +31,8 @@ apiserver:
 
 controllermanager:
   command: >
-    --logtostderr=true
     --master=http://127.0.0.1:8080
-    --v=2
+    --logtostderr=true
   image: "mattma/kube-controller-manager:1.0.1"
   net: "host"
   restart: "always"
@@ -42,9 +42,8 @@ controllermanager:
 
 scheduler:
   command: >
-    --logtostderr=true
     --master=http://127.0.0.1:8080
-    --v=2
+    --logtostderr=true
   image: "mattma/kube-scheduler:1.0.1"
   net: "host"
   restart: "always"
@@ -55,12 +54,13 @@ scheduler:
 kubelet:
   command: >
     --address=0.0.0.0
-    --api-servers=http://127.0.0.1:8080
-    --containerized
-    --enable-server
-    --hostname-override=127.0.0.1
-    --machine-id-file=/rootfs/etc/machine-id
-    --v=2
+    --port=10250
+    --hostname_override=${ETH1_IPV4}
+    --api_servers=http://172.17.8.100:8080
+    --allow_privileged=true
+    --logtostderr=true
+    --healthz_bind_address=0.0.0.0
+    --healthz_port=10248
   image: "mattma/kubelet:1.0.1"
   net: "host"
   privileged: true
@@ -80,9 +80,8 @@ kubelet:
 
 proxy:
   command: >
+    --master=http://172.17.8.100:8080
     --logtostderr=true
-    --master=http://127.0.0.1:8080
-    --v=2
   image: "mattma/kube-proxy:1.0.1"
   net: "host"
   privileged: true
