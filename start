@@ -1,0 +1,63 @@
+docker run --detach --net=host --name=kube-apiserver \
+  --restart=always \
+  --volume=/etc/kubernetes:/etc/kubernetes \
+  --volume=/usr/share/ca-certificates:/etc/ssl/certs \
+  --volume=/var/run/kubernetes:/var/run/kubernetes \
+  mattma/kube-apiserver:1.0.1 \
+  --etcd-servers=http://127.0.0.1:2379 \
+  --insecure-bind-address=0.0.0.0 \
+  --insecure-port=8080 \
+  --logtostderr=true \
+  --service-cluster-ip-range=10.200.20.0/24 \
+  --v=2
+
+docker run --detach --net=host --name=kube-controller-manager \
+  --restart=always \
+  --volume=/etc/kubernetes:/etc/kubernetes \
+  --volume=/usr/share/ca-certificates:/etc/ssl/certs \
+  mattma/kube-controller-manager:1.0.1 \
+  --logtostderr=true \
+  --master=http://127.0.0.1:8080 \
+  --v=2
+
+docker run --detach --net=host --name=kube-scheduler \
+  --restart=always \
+  --volume=/etc/kubernetes:/etc/kubernetes \
+  --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
+  mattma/kube-scheduler:1.0.1 \
+  --logtostderr=true \
+  --master=http://127.0.0.1:8080 \
+  --v=2
+
+docker run --detach --pid=host --net=host --name=kubelet --privileged \
+  --restart=always \
+  --volume=/usr/bin/nsenter:/nsenter \
+  --volume=/usr:/usr \
+  --volume=/lib64:/lib64 \
+  --volume=/:/rootfs:ro \
+  --volume=/etc/kubernetes:/etc/kubernetes \
+  --volume=/etc/os-release:/etc/os-release \
+  --volume=/usr/share/ca-certificates/:/etc/ssl/certs \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --volume=/var/lib/kubelet/:/var/lib/kubelet:rw \
+  --volume=/var/run:/var/run:rw \
+  mattma/kubelet:1.0.1 \
+  --address=0.0.0.0 \
+  --api-servers=http://127.0.0.1:8080 \
+  --containerized \
+  --enable-server \
+  --hostname-override=127.0.0.1 \
+  --machine-id-file=/rootfs/etc/machine-id \
+  --v=2
+
+docker run --detach --net=host --name=kube-proxy --privileged \
+  --restart=always \
+  --volume=/etc/kubernetes:/etc/kubernetes \
+  --volume=/usr/share/ca-certificates:/etc/ssl/certs \
+  --volume=/usr/sbin/iptables:/usr/sbin/iptables \
+  --volume=/lib64:/lib64 \
+  mattma/kube-proxy:1.0.1 \
+  --logtostderr=true \
+  --master=http://127.0.0.1:8080 \
+  --v=2
